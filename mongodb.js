@@ -12,12 +12,16 @@ MongoClient.connect(connectionUrl,
 
     const db = client.db(databaseName);
 
-    db.collection('tasks').findOne({ _id: new ObjectID('5dc268f3e0b1a25dfb1d67c2') })
-      .then((task) => console.log('FIND ONE TASK', task))
-      .catch((findError) => console.log({ findError }));
-
-    db.collection('tasks').find({ completed: true })
-      .toArray()
-      .then((tasks) => console.log('FIND MULTIPLE TASKS', tasks))
-      .catch((findError) => console.log({ findError }));
+    db.collection('tasks').updateMany(
+      {
+        completed: false,
+      },
+      {
+        $set: {
+          completed: true,
+        },
+      },
+    )
+      .then((result) => console.log(result))
+      .catch((updateError) => console.log({ updateError }));
   });
