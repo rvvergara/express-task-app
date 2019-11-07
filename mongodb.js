@@ -12,16 +12,9 @@ MongoClient.connect(connectionUrl,
 
     const db = client.db(databaseName);
 
-    db.collection('tasks').updateMany(
-      {
-        completed: false,
-      },
-      {
-        $set: {
-          completed: true,
-        },
-      },
-    )
-      .then((result) => console.log(result))
-      .catch((updateError) => console.log({ updateError }));
+    db.collection('tasks').deleteOne({
+      description: 'Learn Machine Learning',
+    })
+      .then((res) => console.log(res))
+      .catch((deleteError) => console.log(deleteError));
   });
