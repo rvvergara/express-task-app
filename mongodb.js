@@ -1,9 +1,12 @@
-const mongodb = require('mongodb');
-
-const { MongoClient } = mongodb;
+const { MongoClient, ObjectID } = require('mongodb');
 
 const connectionUrl = 'mongodb://127.0.0.1:27017';
 const databaseName = 'task-manager';
+
+const id = new ObjectID();
+console.log(id.id.length);
+console.log(id.toHexString().length);
+console.log(id.getTimestamp());
 
 MongoClient.connect(connectionUrl,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -15,11 +18,11 @@ MongoClient.connect(connectionUrl,
     const db = client.db(databaseName);
 
     // db.collection('users').insertOne({
-    //   name: 'Kobe',
-    //   age: 40,
-    // }, (error, result) => {
-    //   if (error) {
-    //     return console.log({ error });
+    //   name: 'Dwight',
+    //   age: 33,
+    // }, (insertError, result) => {
+    //   if (insertError) {
+    //     return console.log({ insertError });
     //   }
 
     //   console.log(result.ops);
