@@ -24,6 +24,7 @@
     "nodemon": "^1.19.4"
   },
   "dependencies": {
-    "mongodb": "^3.3.3"
+    "mongodb": "^3.3.3",
+    "mongoose": "^5.7.9"
   }
 }
