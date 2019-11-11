@@ -6,15 +6,31 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager', {
   useUnifiedTopology: true,
 });
 
-const User = mongoose.model('User', {
-  name: {
+// const User = mongoose.model('User', {
+//   name: {
+//     type: String,
+//   },
+//   age: {
+//     type: Number,
+//   },
+// });
+
+// const brandon = new User({ name: true, age: 'twenty-one' });
+
+// brandon.save().then(user => console.log(user)).catch(e => console.log(e));
+
+const Task = mongoose.model('Task', {
+  description: {
     type: String,
   },
-  age: {
-    type: Number,
+  completed: {
+    type: Boolean,
   },
 });
 
-const brandon = new User({ name: true, age: 'twenty-one' });
+const task = new Task({
+  description: 'Learn about cryptocurrencies and Bitcoin',
+  completed: false,
+});
 
-brandon.save().then(user => console.log(user)).catch(e => console.log(e));
+task.save().then(() => console.log(task)).catch(e => console.log(e));
