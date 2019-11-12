@@ -41,6 +41,33 @@ app.post('/tasks', (req, res) => {
     });
 });
 
+app.get('/users', (req, res) => {
+  User
+    .find()
+    .then(users => res.send(users))
+    .catch(e => {
+      res
+        .status(500)
+        .send(e);
+    });
+});
+
+app.get('/users/:id', (req, res) => {
+  User
+    .findOne({ _id: req.params.id })
+    .then(user => {
+      if (!user) {
+        res.status(404);
+        return res.json({ error: 'Cannot find user' });
+      }
+      res.json(user);
+    })
+    .catch(e => {
+      res.status(400)
+        .json(e);
+    });
+});
+
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
