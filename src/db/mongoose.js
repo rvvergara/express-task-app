@@ -46,10 +46,6 @@ const User = mongoose.model('User', {
   },
 });
 
-// const brandon = new User({ name: 'Brandon Ingram  ', email: 'BRANDON@mail.com  ', password: 'supermanisawesome' });
-
-// brandon.save().then(user => console.log(user)).catch(e => console.log(e));
-
 const Task = mongoose.model('Task', {
   description: {
     type: String,
@@ -61,9 +57,3 @@ const Task = mongoose.model('Task', {
     default: false,
   },
 });
-
-// const task = new Task({
-//   description: '      Learn about cryptocurrencies and Bitcoin',
-// });
-
-// task.save().then(() => console.log(task)).catch(e => console.log(e));
