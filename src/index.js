@@ -48,12 +48,13 @@ app.get('/users/:id', async (req, res) => {
   }
 });
 
-app.get('/tasks', (req, res) => {
-  Task.find()
-    .then(tasks => res.json(tasks))
-    .catch(e => {
-      res.status(500).json(e);
-    });
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 });
 
 app.get('/tasks/:id', (req, res) => {
