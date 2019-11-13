@@ -67,9 +67,11 @@ app.get('/tasks', (req, res) => {
 
 app.get('/tasks/:id', (req, res) => {
   Task.findOne({ _id: req.params.id })
-    .then(task => res.json(task))
+    .then(task => (task
+        ? res.json(task)
+        : res.status(404).json({ error: 'Cannot find task' })))
     .catch(error => {
-      res.status(404).json(error);
+      res.status(500).json(error);
     });
 });
 
