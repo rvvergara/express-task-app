@@ -39,18 +39,13 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.get('/users/:id', (req, res) => {
-  User.findOne({ _id: req.params.id })
-    .then(user => {
-      if (!user) {
-        res.status(404);
-        return res.json({ error: 'Cannot find user' });
-      }
-      res.json(user);
-    })
-    .catch(e => {
-      res.status(400).json(e);
-    });
+app.get('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    return user ? res.json(user) : res.status(404).json({ error: 'Cannot find user' });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 app.get('/tasks', (req, res) => {
