@@ -57,14 +57,13 @@ app.get('/tasks', async (req, res) => {
   }
 });
 
-app.get('/tasks/:id', (req, res) => {
-  Task.findOne({ _id: req.params.id })
-    .then(task => (task
-        ? res.json(task)
-        : res.status(404).json({ error: 'Cannot find task' })))
-    .catch(error => {
-      res.status(500).json(error);
-    });
+app.get('/tasks/:id', async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    return task ? res.json(task) : res.status(404).json({ error: 'Cannot find task' });
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 app.listen(port, () => {
