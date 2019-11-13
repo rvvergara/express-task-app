@@ -68,6 +68,17 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
+app.get('/tasks', (req, res) => {
+  Task
+    .find()
+    .then(tasks => res.json(tasks))
+    .catch(e => {
+      res
+        .status(500)
+        .json(e);
+    });
+});
+
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
