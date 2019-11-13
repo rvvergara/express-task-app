@@ -9,17 +9,14 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   const user = new User(req.body);
-
-  user
-    .save()
-    .then(newUser => {
-      res.status(201).json(newUser);
-    })
-    .catch(({ errors }) => {
-      res.status(422).json(errors);
-    });
+  try {
+    const newUser = await user.save();
+    res.status(201).json(newUser);
+  } catch (err) {
+    res.status(422).json(err.errors);
+  }
 });
 
 app.post('/tasks', (req, res) => {
