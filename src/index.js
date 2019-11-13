@@ -19,17 +19,15 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.post('/tasks', (req, res) => {
+app.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
 
-  task
-    .save()
-    .then(newTask => {
-      res.status(201).json(newTask);
-    })
-    .catch(error => {
-      res.status(422).json(error.errors);
-    });
+  try {
+    const newTask = await task.save();
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(422).json(err.errors);
+  }
 });
 
 app.get('/users', (req, res) => {
