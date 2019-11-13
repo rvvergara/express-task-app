@@ -30,12 +30,13 @@ app.post('/tasks', async (req, res) => {
   }
 });
 
-app.get('/users', (req, res) => {
-  User.find()
-    .then(users => res.send(users))
-    .catch(e => {
-      res.status(500).send(e);
-    });
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.send(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 app.get('/users/:id', (req, res) => {
