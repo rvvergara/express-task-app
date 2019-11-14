@@ -19,17 +19,6 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.post('/tasks', async (req, res) => {
-  const task = new Task(req.body);
-
-  try {
-    const newTask = await task.save();
-    res.status(201).json(newTask);
-  } catch (err) {
-    res.status(422).json(err.errors);
-  }
-});
-
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -42,9 +31,22 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    return user ? res.json(user) : res.status(404).json({ error: 'Cannot find user' });
+    return user
+      ? res.json(user)
+      : res.status(404).json({ error: 'Cannot find user' });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+app.post('/tasks', async (req, res) => {
+  const task = new Task(req.body);
+
+  try {
+    const newTask = await task.save();
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(422).json(err.errors);
   }
 });
 
@@ -60,7 +62,9 @@ app.get('/tasks', async (req, res) => {
 app.get('/tasks/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
-    return task ? res.json(task) : res.status(404).json({ error: 'Cannot find task' });
+    return task
+      ? res.json(task)
+      : res.status(404).json({ error: 'Cannot find task' });
   } catch (error) {
     res.json(error);
   }
