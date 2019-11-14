@@ -60,6 +60,15 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
+app.delete('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndRemove(req.params.id);
+    return user ? res.status(202).json({ message: 'Successfully deleted user' }) : res.status(404).json({ error: 'Cannot find user' });
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 app.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
 
