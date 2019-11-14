@@ -40,6 +40,13 @@ app.get('/users/:id', async (req, res) => {
 });
 
 app.put('/users/:id', async (req, res) => {
+  const allowedUpdates = ['name', 'email', 'age', 'password'];
+  const updates = Object.keys(req.body);
+  const isValid = updates.every(update => allowedUpdates.includes(update));
+
+  if (!isValid) {
+    return res.status(422).json({ error: 'Disallowed property/ies' });
+  }
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true, runValidators: true,
