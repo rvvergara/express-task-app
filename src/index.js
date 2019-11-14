@@ -121,6 +121,16 @@ app.put('/tasks/:id', async (req, res) => {
   }
 });
 
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const task = await Task.findByIdAndRemove(req.params.id);
+
+    return task ? res.status(202).json({ message: 'Task deleted' }) : res.status(404).json({ error: 'Cannot find task' });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
