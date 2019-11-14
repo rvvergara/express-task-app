@@ -84,6 +84,27 @@ app.get('/tasks/:id', async (req, res) => {
   }
 });
 
+app.put('/tasks/:id', async (req, res) => {
+  const allowedUpdates = ['description', 'completed'];
+  const updates = Object.keys(req.body);
+  const isValid = updates.every(update => allowedUpdates.includes(update));
+
+  if (!isValid) {
+    return res.status(422).json({ error: 'Disallowed property/ies' });
+  }
+
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    return task ? res.status(202).json(task) : res.status(404).json({ error: 'Cannot find task' });
+  } catch (e) {
+    res.status(422).json(e.errors);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
