@@ -62,7 +62,7 @@ app.put('/users/:id', async (req, res) => {
 
 app.delete('/users/:id', async (req, res) => {
   try {
-    const user = await User.findByIdAndRemove(req.params.id);
+    const user = await User.findByIdAndDelete(req.params.id);
     return user ? res.status(202).json({ message: 'Successfully deleted user' }) : res.status(404).json({ error: 'Cannot find user' });
   } catch (error) {
     res.json(error);
@@ -123,7 +123,7 @@ app.put('/tasks/:id', async (req, res) => {
 
 app.delete('/tasks/:id', async (req, res) => {
   try {
-    const task = await Task.findByIdAndRemove(req.params.id);
+    const task = await Task.findByIdAndDelete(req.params.id);
 
     return task ? res.status(202).json({ message: 'Task deleted' }) : res.status(404).json({ error: 'Cannot find task' });
   } catch (error) {
