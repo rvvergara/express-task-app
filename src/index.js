@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use('/users', userRouter);
-app.use('/tasks', taskRouter);
+app.use(userRouter);
+app.use(taskRouter);
 
 
 app.listen(port, () => {

@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 const router = new express.Router();
 
-router.post('', async (req, res) => {
+router.post('/users', async (req, res) => {
   const user = new User(req.body);
   try {
     const newUser = await user.save();
@@ -13,7 +13,7 @@ router.post('', async (req, res) => {
   }
 });
 
-router.get('', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const users = await User.find();
     res.send(users);
@@ -22,7 +22,7 @@ router.get('', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     return user
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/users/:id', async (req, res) => {
   const allowedUpdates = ['name', 'email', 'age', 'password'];
   const updates = Object.keys(req.body);
   const isValid = updates.every(update => allowedUpdates.includes(update));
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     return user ? res.status(202).json({ message: 'Successfully deleted user' }) : res.status(404).json({ error: 'Cannot find user' });

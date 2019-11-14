@@ -3,7 +3,7 @@ const Task = require('../models/task');
 
 const router = new express.Router();
 
-router.post('', async (req, res) => {
+router.post('/tasks', async (req, res) => {
   const task = new Task(req.body);
 
   try {
@@ -14,7 +14,7 @@ router.post('', async (req, res) => {
   }
 });
 
-router.get('', async (req, res) => {
+router.get('/tasks', async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -23,7 +23,7 @@ router.get('', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/tasks/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     return task
@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/tasks/:id', async (req, res) => {
   const allowedUpdates = ['description', 'completed'];
   const updates = Object.keys(req.body);
   const isValid = updates.every(update => allowedUpdates.includes(update));
@@ -55,7 +55,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/tasks/:id', async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
 
