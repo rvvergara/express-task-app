@@ -40,9 +40,10 @@ module.exports = {
       return res.status(422).json({ error: 'Disallowed property/ies' });
     }
     try {
-      const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-        new: true, runValidators: true,
-      });
+      const user = await User.findById(req.params.id);
+      updates.forEach(update => user[update] = req.body[update]);
+
+      await user.save();
 
       return user
         ? res.status(200).json(user)
