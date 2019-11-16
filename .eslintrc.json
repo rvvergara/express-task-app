@@ -21,6 +21,7 @@
         "arrow-parens": 0,
         "indent": 0,
         "no-return-assign": 0,
-        "func-names": 0
+        "func-names": 0,
+        "no-use-before-define": 0
     }
 }

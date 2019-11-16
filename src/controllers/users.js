@@ -27,7 +27,7 @@ module.exports = {
       const newUser = await user.save();
       res.status(201).json(newUser);
     } catch (err) {
-      res.status(422).json(err.errors);
+      res.status(422).json(err.errors || err);
     }
   },
 
