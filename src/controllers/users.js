@@ -29,10 +29,7 @@ module.exports = {
       updates.forEach(update => user[update] = req.body[update]);
 
       await user.save();
-
-      return user
-        ? res.status(200).json(user)
-        : res.status(404).json({ error: 'Cannot find user' });
+      return res.status(202).json(user);
     } catch (e) {
       res.status(422).send(e.errors);
     }
