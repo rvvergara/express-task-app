@@ -1,13 +1,8 @@
 const User = require('../models/user');
 
 module.exports = {
-  async index(req, res) {
-    try {
-      const users = await User.find();
-      res.send(users);
-    } catch (err) {
-      res.status(500).send(err);
-    }
+  async profile(req, res) {
+    res.send(req.user);
   },
 
   async show(req, res) {
