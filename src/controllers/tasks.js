@@ -3,7 +3,8 @@ const Task = require('../models/task');
 module.exports = {
   async index(req, res) {
     try {
-      const tasks = await Task.find();
+      await req.user.populate('tasks').execPopulate();
+      const { tasks } = req.user;
       res.json(tasks);
     } catch (error) {
       res.status(500).json(error);
@@ -12,7 +13,7 @@ module.exports = {
 
   async show(req, res) {
     try {
-      const task = await Task.findById(req.params.id);
+      const task = await Task.findOne({ _id: req.params.id, owner: req.user._id });
       return task
         ? res.json(task)
         : res.status(404).json({ error: 'Cannot find task' });
@@ -44,20 +45,19 @@ module.exports = {
     }
 
     try {
-      const task = await Task.findById(req.params.id);
-
+      const task = await Task.findOne({ _id: req.params.id, owner: req.user._id });
       updates.forEach(update => task[update] = req.body[update]);
       await task.save();
 
       return task ? res.status(202).json(task) : res.status(404).json({ error: 'Cannot find task' });
     } catch (e) {
-      res.status(422).json(e.errors);
+      res.status(422).json(e.errors || e);
     }
   },
 
   async delete(req, res) {
     try {
-      const task = await Task.findByIdAndDelete(req.params.id);
+      const task = await Task.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
 
       return task ? res.status(202).json({ message: 'Task deleted' }) : res.status(404).json({ error: 'Cannot find task' });
     } catch (error) {
