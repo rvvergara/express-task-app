@@ -25,7 +25,8 @@ module.exports = {
     const user = new User(req.body);
     try {
       const newUser = await user.save();
-      res.status(201).json(newUser);
+      const token = await user.generateAuthToken();
+      res.status(201).json({ user: newUser, token });
     } catch (err) {
       res.status(422).json(err.errors || err);
     }
