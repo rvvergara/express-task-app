@@ -22,8 +22,10 @@ module.exports = {
   },
 
   async create(req, res) {
-    const task = new Task(req.body);
-
+    const task = new Task({
+       ...req.body,
+       owner: req.user._id,
+});
     try {
       const newTask = await task.save();
       res.status(201).json(newTask);
