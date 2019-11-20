@@ -21,4 +21,15 @@ module.exports = {
       res.status(500).send('Something went wrong');
     }
   },
+
+  async destroyAll(req, res) {
+    try {
+      const { user } = req;
+      user.tokens = [];
+      await user.save();
+      res.json({ message: 'Logged out from all devices' });
+    } catch (e) {
+      res.status(500).send('Something went wrong');
+    }
+  },
 };

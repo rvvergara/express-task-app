@@ -11,6 +11,8 @@ router.post('/login', sessionsController.create);
 
 router.delete('/logout', auth, sessionsController.destroy);
 
+router.delete('/logoutAll', auth, sessionsController.destroyAll);
+
 router.get('/users/me', auth, usersController.profile);
 
 router.get('/users/:id', usersController.show);
