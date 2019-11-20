@@ -1,11 +1,10 @@
 const User = require('../models/user');
 
-module.exports = {
-  async show(req, res) {
+  exports.show = async (req, res) => {
     res.send(req.user);
-  },
+  };
 
-  async create(req, res) {
+  exports.create = async (req, res) => {
     const user = new User(req.body);
     try {
       await user.save();
@@ -14,9 +13,9 @@ module.exports = {
     } catch (err) {
       res.status(422).json(err.errors || err);
     }
-  },
+  };
 
-  async update(req, res) {
+  exports.update = async (req, res) => {
     const allowedUpdates = ['name', 'email', 'age', 'password'];
     const updates = Object.keys(req.body);
     const isValid = updates.every(update => allowedUpdates.includes(update));
@@ -33,9 +32,9 @@ module.exports = {
     } catch (e) {
       res.status(422).send(e.errors);
     }
-  },
+  };
 
-  async delete(req, res) {
+  exports.delete = async (req, res) => {
     try {
       await req.user.remove();
       return res.status(202).json({
@@ -44,5 +43,4 @@ module.exports = {
     } catch (error) {
       res.json(error);
     }
-  },
-};
+  };
