@@ -5,9 +5,20 @@ module.exports = {
     try {
       const user = await User.findByCredentials(req.body.email, req.body.password);
       const token = await user.generateAuthToken();
-      res.json({ user, token });
+      res.status(201).json({ user, token });
     } catch (error) {
       res.status(401).send(error);
+    }
+  },
+
+  async destroy(req, res) {
+    try {
+       const { user } = req;
+       user.tokens = user.tokens.filter(({ token }) => token !== req.token);
+       await user.save();
+       res.json({ message: 'Successfully logged out' });
+    } catch (e) {
+      res.status(500).send('Something went wrong');
     }
   },
 };
