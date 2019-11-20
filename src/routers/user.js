@@ -13,12 +13,10 @@ router.delete('/logout', auth, sessionsController.destroy);
 
 router.delete('/logoutAll', auth, sessionsController.destroyAll);
 
-router.get('/users/me', auth, usersController.profile);
+router.get('/users/me', auth, usersController.show);
 
-router.get('/users/:id', usersController.show);
+router.put('/users/me', auth, usersController.update);
 
-router.put('/users/:id', usersController.update);
-
-router.delete('/users/:id', usersController.delete);
+router.delete('/users/me', auth, usersController.delete);
 
 module.exports = router;

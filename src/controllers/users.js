@@ -1,27 +1,16 @@
 const User = require('../models/user');
 
 module.exports = {
-  async profile(req, res) {
-    res.send(req.user);
-  },
-
   async show(req, res) {
-    try {
-      const user = await User.findById(req.params.id);
-      return user
-        ? res.json(user)
-        : res.status(404).json({ error: 'Cannot find user' });
-    } catch (err) {
-      res.status(500).json(err);
-    }
+    res.send(req.user);
   },
 
   async create(req, res) {
     const user = new User(req.body);
     try {
-      const newUser = await user.save();
+      await user.save();
       const token = await user.generateAuthToken();
-      res.status(201).json({ user: newUser, token });
+      res.status(201).json({ user, token });
     } catch (err) {
       res.status(422).json(err.errors || err);
     }
@@ -36,7 +25,7 @@ module.exports = {
       return res.status(422).json({ error: 'Disallowed property/ies' });
     }
     try {
-      const user = await User.findById(req.params.id);
+      const user = await req.user;
       updates.forEach(update => user[update] = req.body[update]);
 
       await user.save();
@@ -51,8 +40,10 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      const user = await User.findByIdAndDelete(req.params.id);
-      return user ? res.status(202).json({ message: 'Successfully deleted user' }) : res.status(404).json({ error: 'Cannot find user' });
+      await req.user.remove();
+      return res.status(202).json({
+        message: 'Successfully deleted user',
+      });
     } catch (error) {
       res.json(error);
     }
