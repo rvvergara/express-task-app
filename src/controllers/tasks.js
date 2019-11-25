@@ -16,6 +16,10 @@ exports.index = async (req, res) => {
     await req.user.populate({
       path: 'tasks',
       match,
+      options: {
+        limit: parseInt(req.query.limit),
+        skip: parseInt(req.query.skip),
+      },
     }).execPopulate();
     const { tasks } = req.user;
     res.json(tasks);
