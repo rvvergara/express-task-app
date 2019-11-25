@@ -8,19 +8,30 @@ const findTask = async (user, id) => {
 
 exports.index = async (req, res) => {
   const match = {};
+  const sort = {};
 
   if (req.query.completed) {
     match.completed = req.completed === 'true';
   }
+
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split('_');
+    const [key, value] = parts;
+    sort[key] = value === 'asc' ? 1 : -1;
+  }
+
   try {
-    await req.user.populate({
-      path: 'tasks',
-      match,
-      options: {
-        limit: parseInt(req.query.limit),
-        skip: parseInt(req.query.skip),
-      },
-    }).execPopulate();
+    await req.user
+      .populate({
+        path: 'tasks',
+        match,
+        options: {
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+          sort,
+        },
+      })
+      .execPopulate();
     const { tasks } = req.user;
     res.json(tasks);
   } catch (error) {
@@ -41,9 +52,9 @@ exports.show = async (req, res) => {
 
 exports.create = async (req, res) => {
   const task = new Task({
-      ...req.body,
-      owner: req.user._id,
-});
+    ...req.body,
+    owner: req.user._id,
+  });
   try {
     const newTask = await task.save();
     res.status(201).json(newTask);
@@ -63,10 +74,12 @@ exports.update = async (req, res) => {
 
   try {
     const task = await findTask(req.user, req.params.id);
-    updates.forEach(update => task[update] = req.body[update]);
+    updates.forEach(update => (task[update] = req.body[update]));
     await task.save();
 
-    return task ? res.status(202).json(task) : res.status(404).json({ error: 'Cannot find task' });
+    return task
+      ? res.status(202).json(task)
+      : res.status(404).json({ error: 'Cannot find task' });
   } catch (e) {
     res.status(422).json(e.errors || e);
   }
@@ -74,9 +87,14 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const task = await Task.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
+    const task = await Task.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
 
-    return task ? res.status(202).json({ message: 'Task deleted' }) : res.status(404).json({ error: 'Cannot find task' });
+    return task
+      ? res.status(202).json({ message: 'Task deleted' })
+      : res.status(404).json({ error: 'Cannot find task' });
   } catch (error) {
     res.status(500).json(error);
   }
